@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import TextInput from "./TextInput";
+import SelectInput from "./SelectInput";
+import TextAreaInput from "./TextAreaInput";
 
 const NoteForm = ({ setNotes, notes }) => {
   const [formData, setFormData] = useState({
@@ -7,6 +10,7 @@ const NoteForm = ({ setNotes, notes }) => {
     category: "work",
     description: "",
   });
+  const [isFormVisible, setIsFormVisible] = useState(true);
 
   const handleChange = (e) => {
     setFormData({
@@ -34,88 +38,67 @@ const NoteForm = ({ setNotes, notes }) => {
   };
 
   return (
-    <form className="mb-6" onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="title"
-        >
-          Title
-        </label>
-        <input
-          name="title"
-          type="text"
-          id="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full p-2 border rounded-lg"
-          placeholder="Enter note title"
-        />
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="priority"
-        >
-          Priority
-        </label>
-
-        <select
-          type="text"
-          name="priority
-"
-          id="priority"
-          value={formData.priority}
-          onChange={handleChange}
-          className="w-full p-2 border rounded-lg mt-2"
-        >
-          <option value="high">High</option>
-          <option value="normal">Normal</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="category"
-        >
-          Category
-        </label>
-        <select
-          type="text"
-          name="category"
-          id="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="w-full p-2 border rounded-lg mt-2"
-        >
-          <option value="work">Work</option>
-          <option value="personal">Personal</option>
-          <option value="idea">Idea</option>
-        </select>
-      </div>
-      <div className="mb-4">
-        <label
-          className="block text-gray-700 text-sm font-bold mb-2"
-          htmlFor="description"
-        >
-          Description
-        </label>
-        <textarea
-          name="description"
-          type="text"
-          className="w-full p-2 border rounded-lg"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Enter note description"
-          rows="4"
-          id="description"
-        ></textarea>
-      </div>
-      <button className="w-full bg-purple-600 text-white py-2 rounded-lg cursor-pointer hover:bg-purple-500">
-        Save
+    <>
+      <button
+        onClick={() => {
+          setIsFormVisible(!isFormVisible);
+        }}
+        className="w-full bg-gray-100 border border-gray-300 text-purple-800 py-2 rounded-lg cursor-pointer"
+      >
+        {isFormVisible ? "Hide Form" : "Add New Note"}
       </button>
-    </form>
+      {isFormVisible && (
+        <form className="mb-6 mt-6" onSubmit={handleSubmit}>
+          <TextInput
+            label="Title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+          />
+          <SelectInput
+            label="Priority"
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+            options={[
+              { value: "high", label: "High" },
+              { value: "medium", label: "Medium" },
+              { value: "normal", label: "Normal" },
+            ]}
+          />
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="category"
+            >
+              Category
+            </label>
+            <select
+              type="text"
+              name="category"
+              id="category"
+              value={formData.category}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg mt-2"
+            >
+              <option value="work">Work</option>
+              <option value="personal">Personal</option>
+              <option value="idea">Idea</option>
+            </select>
+          </div>
+          <TextAreaInput
+            label="Description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required={true}
+          />
+          <button className="w-full bg-purple-600 text-white py-2 rounded-lg cursor-pointer hover:bg-purple-500">
+            Save
+          </button>
+        </form>
+      )}
+    </>
   );
 };
 
